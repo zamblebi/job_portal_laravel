@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AddUpdateCvController;
+use App\Http\Controllers\ShowWorkerProfil;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// show worker profil
+Route::get('dashboard/worker-profil', [ShowWorkerProfil::class, "index"]);
+
+//Add new cv for worker
+Route::post('/dashboard/worker-profil/worker-add-cv', [AddUpdateCvController::class, 'store']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
