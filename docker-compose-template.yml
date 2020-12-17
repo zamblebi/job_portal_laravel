@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  node:
+    image: node:lts-alpine
+    command: sh -c "npm install && npm run dev"
+    container_name: node
+    ports:
+      - 3000:3000
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    volumes:
+      - mysql_data_laravel_app:/var/lib/mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_app
+    ports:
+      - 6603:3306
+    expose:
+      - 3306
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    restart: always
+    container_name: phpmyadmin
+  web_app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - node
+    ports:
+      - "5000:5000"
+volumes: 
+    mysql_data_laravel_app:
